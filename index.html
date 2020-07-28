@@ -13,55 +13,97 @@
 
 <script type='text/javascript' src='https://service.force.com/embeddedservice/5.0/esw.min.js'></script>
 <script type='text/javascript'>
-	var initESW = function(gslbBaseURL) {
-		embedded_svc.settings.displayHelpButton = true; //Or false
-		embedded_svc.settings.language = ''; //For example, enter 'en' or 'en-US'
+    !function() {
+        let a = XMLHttpRequest.prototype.open;
+        XMLHttpRequest.prototype.open = function() {
+            this.addEventListener('load', b => {
+                let c = document.querySelector('input#CS_Web_Session_Id__c');
+                if(c != null) {
+                    document.querySelector('label[for="CS_Web_Session_Id__c"]').style.display = 'none';
+                    c.style.display = 'none';
+                    c.value = 'testKiko88';
+                    c.dispatchEvent(new Event('change',{'bubbles':!0}));
+                }
+                
+                let z = document.querySelector('input#SuppliedName');
+                if(z != null) {
+                    //document.querySelector('label[for="SuppliedName"]').style.display = 'none';
+                    //c.style.display = 'none';
+                    z.value = 'testKiko88';
+                    z.dispatchEvent(new Event('change',{'bubbles':!0}));
+                }
+                
+                let x = document.querySelector('input#Email__c');
+                if(x != null) {
+                    x.value = 'testKiko88';
+                    x.dispatchEvent(new Event('change',{'bubbles':!0}));
+                }
+                
+            });
+            a.apply(this,arguments);
+        };
+    }();
+    var initESW = function(gslbBaseURL) {
+        embedded_svc.settings.displayHelpButton = true; //Or false
+        embedded_svc.settings.language = ''; //For example, enter 'en' or 'en-US'
 
-		//embedded_svc.settings.defaultMinimizedText = '...'; //(Defaults to Chat with an Expert)
-		//embedded_svc.settings.disabledMinimizedText = '...'; //(Defaults to Agent Offline)
+        //embedded_svc.settings.defaultMinimizedText = '...'; //(Defaults to Chat with an Expert)
+        //embedded_svc.settings.disabledMinimizedText = '...'; //(Defaults to Agent Offline)
 
-		//embedded_svc.settings.loadingText = ''; //(Defaults to Loading)
-		//embedded_svc.settings.storageDomain = 'yourdomain.com'; //(Sets the domain for your deployment so that visitors can navigate subdomains during a chat session)
+        //embedded_svc.settings.loadingText = ''; //(Defaults to Loading)
+        //embedded_svc.settings.storageDomain = 'yourdomain.com'; //(Sets the domain for your deployment so that visitors can navigate subdomains during a chat session)
 
-		// Settings for Chat
-		//embedded_svc.settings.directToButtonRouting = function(prechatFormData) {
-			// Dynamically changes the button ID based on what the visitor enters in the pre-chat form.
-			// Returns a valid button ID.
-		//};
-		//embedded_svc.settings.prepopulatedPrechatFields = {}; //Sets the auto-population of pre-chat form fields
-		//embedded_svc.settings.fallbackRouting = []; //An array of button IDs, user IDs, or userId_buttonId
-		//embedded_svc.settings.offlineSupportMinimizedText = '...'; //(Defaults to Contact Us)
+        // Settings for Chat
+        //embedded_svc.settings.directToButtonRouting = function(prechatFormData) {
+            // Dynamically changes the button ID based on what the visitor enters in the pre-chat form.
+            // Returns a valid button ID.
+        //};
+        //embedded_svc.settings.fallbackRouting = []; //An array of button IDs, user IDs, or userId_buttonId
+        //embedded_svc.settings.offlineSupportMinimizedText = '...'; //(Defaults to Contact Us)
+        embedded_svc.settings.extraPrechatInfo = [{
+        "entityFieldMaps": [{
+        "doCreate":false,
+        "doFind":true,
+        "fieldName":"Web_Session_Id__c",
+        "isExactMatch":true,
+        "label":"Web Chat ID"
+        }],
+        "entityName":"Lead", 
+        "saveToTranscript": "LeadId" 
+        }];
 
-		embedded_svc.settings.enabledFeatures = ['LiveAgent'];
-		embedded_svc.settings.entryFeature = 'LiveAgent';
+        embedded_svc.settings.prepopulatedPrechatFields = { Web_Session_Id__c: 'testKiko88'}; //Sets the auto-population of pre-chat form fields
 
-		embedded_svc.init(
-			'https://iselect--SPQA.my.salesforce.com',
-			'https://spqa-iselect-community.cs6.force.com/jaypersonalpoc',
-			gslbBaseURL,
-			'00DN0000000R9EZ',
-			'Health_Chat_Team',
-			{
-				baseLiveAgentContentURL: 'https://c.la1-c1cs-ukb.salesforceliveagent.com/content',
-				deploymentId: '572N000000000oO',
-				buttonId: '573N00000008PWS',
-				baseLiveAgentURL: 'https://d.la1-c1cs-ukb.salesforceliveagent.com/chat',
-				eswLiveAgentDevName: 'EmbeddedServiceLiveAgent_Parent04IN00000004CjuMAE_173702c016a',
-				isOfflineSupportEnabled: true
-			}
-		);
-	};
+        embedded_svc.settings.enabledFeatures = ['LiveAgent'];
+        embedded_svc.settings.entryFeature = 'LiveAgent';
 
-	if (!window.embedded_svc) {
-		var s = document.createElement('script');
-		s.setAttribute('src', 'https://iselect--SPQA.my.salesforce.com/embeddedservice/5.0/esw.min.js');
-		s.onload = function() {
-			initESW(null);
-		};
-		document.body.appendChild(s);
-	} else {
-		initESW('https://service.force.com');
-	}
+        embedded_svc.init(
+            'https://iselect--SPQA.my.salesforce.com',
+            'https://spqa-iselect-community.cs6.force.com/jaypersonalpoc',
+            gslbBaseURL,
+            '00DN0000000R9EZ',
+            'Health_Chat_Team',
+            {
+                baseLiveAgentContentURL: 'https://c.la1-c1cs-ukb.salesforceliveagent.com/content',
+                deploymentId: '572N000000000oO',
+                buttonId: '573N00000008PWS',
+                baseLiveAgentURL: 'https://d.la1-c1cs-ukb.salesforceliveagent.com/chat',
+                eswLiveAgentDevName: 'EmbeddedServiceLiveAgent_Parent04IN00000004CjuMAE_173702c016a',
+                isOfflineSupportEnabled: true
+            }
+        );
+    };
+
+    if (!window.embedded_svc) {
+        var s = document.createElement('script');
+        s.setAttribute('src', 'https://iselect--SPQA.my.salesforce.com/embeddedservice/5.0/esw.min.js');
+        s.onload = function() {
+            initESW(null);
+        };
+        document.body.appendChild(s);
+    } else {
+        initESW('https://service.force.com');
+    }
 </script>
 </BODY>
 </HTML>
